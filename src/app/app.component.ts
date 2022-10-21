@@ -1,10 +1,30 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
+import { UserService } from './servcies/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'random-card';
+  user:any
+  constructor(private userService:UserService,private toaster:ToastrService){
+
+  }
+  ngOnInit(){
+    this.userService.getUser().subscribe(
+      (user:any)=>{
+        console.log(user)
+        this.user=user.results[0];
+      },
+      (err)=>{
+        this.toaster.error(err.status,"OOPS!!")
+      },
+    )
+  }
+  reload(){
+    this.ngOnInit();
+  }
 }
